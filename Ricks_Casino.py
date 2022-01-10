@@ -1,10 +1,10 @@
-# BlackJack
+# Rick's Casino
 import random
-
+# variable for games
 suits = ('♥', '♦', '♠', '♣')
 ranks = ('2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A')
 values = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8,
-          '9': 9, '10': 10, 'J': 10, 'Q': 10, 'K': 10, 'A': 11}
+          '9': 9, '10': 10, 'J': 10, 'Q': 10, 'K': 10, 'A': 11} # assing rank to value in dict
 numbers_roulrtte = {'00': ['g', None], '0': ['g', None], '1': ['r', 'o'], '2': ['b', 'e'], '3': ['r', 'o'],
                     '4': ['b', 'e'], '5': ['r', 'o'], '6': ['b', 'e'], '7': ['r', 'o'], '8': ['b', 'e'],
                     '9': ['r', 'o'], '10': ['b', 'e'], '11': ['b', 'o'], '12': ['r', 'e'], '13': ['b', 'o'],
@@ -12,11 +12,12 @@ numbers_roulrtte = {'00': ['g', None], '0': ['g', None], '1': ['r', 'o'], '2': [
                     '19': ['r', 'o'], '20': ['b', 'e'], '21': ['r', 'o'], '22': ['b', 'e'], '23': ['r', 'o'],
                     '24': ['b', 'e'], '25': ['r', 'o'], '26': ['b', 'e'], '27': ['r', 'o'], '28': ['b', 'e'],
                     '29': ['b', 'o'], '30': ['r', 'e'], '31': ['b', 'o'], '32': ['r', 'e'], '33': ['b', 'o'],
-                    '34': ['r', 'e'], '35': ['b', 'o'], '36': ['r', 'e']}
+                    '34': ['r', 'e'], '35': ['b', 'o'], '36': ['r', 'e']} # Dict of numbers and there attribute
 Slot_Reel = ['♥', '♦', '♠', '♣', '♥', '♦', '♠', '♣', '♥', '♦', '♠', '♣', '♥', '♦', '♠', '♣', '7']
 letter_to_color = {'b': 'Black', 'r': 'Red', 'g': 'Green'}
 roulette_numbers_history = []
 slot_history = []
+# Games explanation (how to play)
 slot_key = 'Welcome to  Roy\'s slot machine (please don\'t go bird watching) ' \
            '\n The BIGGEST prise is for 7,7,7 and you will get 1,000,000 Shmekels' \
            '\n for 3-of-a-kind (any other then 7) you will get five times your bet $_$ ' \
@@ -33,7 +34,7 @@ roulette_key = '\nWelcome to Summer\'s roulette!!' \
                '\nAnd last you can bet on Odd/Even to get your bet in winning/' \
                '\nSummer is filling nice so you place bet on every thing you want in the round .' \
                '\nMay the Summer be ever  in your favor '
-bj_flag = 0
+
 
 
 # Card handle the suits and ranks to bring you a card with suit & rank
@@ -45,7 +46,7 @@ class Card:
     def __str__(self):
         return self.rank + '\t of ' + self.suit
 
-
+# Handle the deck souffle the cards and remove cards from deck
 class Deck:
     def __init__(self):
         self.deck = []  # start with an empty list
@@ -66,7 +67,7 @@ class Deck:
         single_card = self.deck.pop()  # remove card from main deck
         return single_card
 
-
+# assigning hand to player/dealer add a card and hide dealer's first card from player
 class Hand:
     def __init__(self, name, deck):
         self.cards = []  # start with an empty list as we did in the Deck class
@@ -94,7 +95,7 @@ class Hand:
             self.value -= 10
             self.aces -= 1
 
-
+# Handle's player chips from the random in the start to wining or losing
 class Chips:
     def __init__(self, player_stack):
         self.total = player_stack
@@ -109,7 +110,7 @@ class Chips:
     def lose_bet(self):
         self.total -= self.bet
 
-
+# check if the player bet is with in the possible parameters
 def take_bet(chips):
     while True:
         try:
@@ -122,7 +123,23 @@ def take_bet(chips):
             else:
                 break
 
+# ask the player if to stay or take
+def ask_take(deck, hand):  # player take or saty function
+    while True:
+        x = input('would you like to take or stay? please enter "t" to take or "s" to stay: ')
+        if x and x[0].lower() == 't':
+            hand.add_card(deck.deal())
+            print(hand)
+            return True
+        elif x and x[0].lower() == 's':
+            print('Player is staying ,dealer turn  ')
+            return False
 
+        else:
+            print('WTF enter only "t" or "s" are you dumb? try again  ')
+            continue
+
+# Run the blackJack game
 def black_jack(chips, bj_flag):
     if bj_flag == 0:
         print(blackjack_key)
@@ -171,23 +188,7 @@ def black_jack(chips, bj_flag):
         chips.lose_bet()
         return
 
-
-def ask_take(deck, hand):  # player take or saty function
-    while True:
-        x = input('would you like to take or stay? please enter "t" to take or "s" to stay: ')
-        if x and x[0].lower() == 't':
-            hand.add_card(deck.deal())
-            print(hand)
-            return True
-        elif x and x[0].lower() == 's':
-            print('Player is staying ,dealer turn  ')
-            return False
-
-        else:
-            print('WTF enter only "t" or "s" are you dumb? try again  ')
-            continue
-
-
+# Run Summer's roulette
 def roulette(chips):
     history = '\n'.join(roulette_numbers_history)
     if len(roulette_numbers_history) > 0:
@@ -204,7 +205,7 @@ def roulette(chips):
     chips.total += delta_shmekels
     print('thanks for playing roulette don\'t ever come back with out bird man')
 
-
+# Take the roulette multi-bet (you can bet multiple times )
 def take_roulette_bet(chips):
     bets = {'number_bets': [], 'coler_bets': [], 'oddeven_bets': []}
     remaining_chips = chips.total
@@ -271,11 +272,11 @@ def take_roulette_bet(chips):
             break
     return bets
 
-
+# Random a number between 00-36 for the roulette game
 def get_roulette_number():
     return random.choice(list(numbers_roulrtte.keys()))
 
-
+# Because of the multi-bet need to stock the wining and losing to give a total of your result
 def calc_result_roulette(all_bets, number):
     delta = 0
 
@@ -298,32 +299,8 @@ def calc_result_roulette(all_bets, number):
             delta -= bet_oddeven[1]
     return delta
 
-
-def play_casino():
-    print('Wolcome to Rick casino we only acept Shmekels !  ')
-    chips = Chips(random.randint(5, 50) * 10)
-    print(f'You been given {chips.total} Shmekels by the grease of all powerful Rick 137  \nUse them wisely... \n')
-    bj_flag = 0
-    while chips.total > 0:
-        print(f'\n\nyou got {chips.total} Shmekels in your Shmekels bag ')
-
-        pick_game = input(f'\nPlease pick:\n(B)Bleckjack\n(R)Roulette\n(S)Slot machine\n(Q)Quit \nPick now: : ')
-        if pick_game.lower() == 'b':
-            black_jack(chips, bj_flag)
-            bj_flag += 1
-        elif pick_game.lower() == 'r':
-            roulette(chips)
-        elif pick_game.lower() == 's':
-            slot_mechine(chips)
-        elif pick_game.lower() == 'q':
-            break
-        else:
-            print(f' {pick_game} is not one of the choices please pick right this time!!')
-    if chips.total <= 0:
-        print('\ndon\'t ever and we mean ever come back here with out Shmekels!! $_$ ')
-
-
-def slot_mechine(chips):
+# Roy's slot machine main function
+def slot_machine(chips):
     if not slot_history:
         print(f'\n{slot_key}\n')
     else:
@@ -333,7 +310,7 @@ def slot_mechine(chips):
     slot_history.append(results)
     calc_result_slot(results, chips)
 
-
+# Bring the player the slot machine result one reel at a time for the drama
 def spin_reel():
     all_result = []
     for i in range(3):
@@ -345,7 +322,7 @@ def spin_reel():
     print(f'The result {all_result}')
     return all_result
 
-
+# calc the winning or losing of the slot machine
 def calc_result_slot(results, chips):
     counts = {'♥': 0, '♦': 0, '♠': 0, '♣': 0, '7': 0}
     win_str = f'you are a loser!! and your fired'
@@ -366,6 +343,30 @@ def calc_result_slot(results, chips):
             chips.total += chips.bet * 2
             win_str = f'You are very mediocre person take your Shmekels and go  '
     print(win_str)
+
+# main Casino function and the one we active to run the game
+def play_casino():
+    print('Wolcome to Rick casino we only acept Shmekels !  ')
+    chips = Chips(random.randint(5, 50) * 10)
+    print(f'You been given {chips.total} Shmekels by the grease of all powerful Rick 137  \nUse them wisely... \n')
+    bj_flag = 0
+    while chips.total > 0:
+        print(f'\n\nyou got {chips.total} Shmekels in your Shmekels bag ')
+
+        pick_game = input(f'\nPlease pick:\n(B)Bleckjack\n(R)Roulette\n(S)Slot machine\n(Q)Quit \nPick now: : ')
+        if pick_game.lower() == 'b':
+            black_jack(chips, bj_flag)
+            bj_flag += 1
+        elif pick_game.lower() == 'r':
+            roulette(chips)
+        elif pick_game.lower() == 's':
+            slot_machine(chips)
+        elif pick_game.lower() == 'q':
+            break
+        else:
+            print(f' {pick_game} is not one of the choices please pick right this time!!')
+    if chips.total <= 0:
+        print('\ndon\'t ever and we mean ever come back here with out Shmekels!! $_$ ')
 
 
 play_casino()
