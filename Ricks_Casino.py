@@ -353,7 +353,7 @@ def play_casino():
     while chips.total > 0:
         print(f'\n\nyou got {chips.total} Shmekels in your Shmekels bag ')
 
-        pick_game = input(f'\nPlease pick:\n(B)Bleckjack\n(R)Roulette\n(S)Slot machine\n(Q)Quit \nPick now: : ')
+        pick_game = input(f'\nPlease pick:\n(B)BirdPorsen Bleckjack\n(R)Summer\'s Roulette\n(S) Roy\'s Slot machine\n(Q)Quit \nPick now: : ')
         if pick_game.lower() == 'b':
             black_jack(chips, bj_flag)
             bj_flag += 1
