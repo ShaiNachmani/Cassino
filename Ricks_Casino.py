@@ -344,7 +344,7 @@ def calc_result_slot(results, chips):
             win_str = f'You are very mediocre person take your Shmekels and go  '
     print(win_str)
 
-# main Casino function and the one we active to run the game
+# Main Casino function and the one we active to run the game
 def play_casino():
     print('Wolcome to Rick casino we only acept Shmekels !  ')
     chips = Chips(random.randint(5, 50) * 10)
